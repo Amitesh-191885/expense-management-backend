@@ -43,8 +43,10 @@ It supports secure user authentication, transaction management, budgeting, and f
 
 ---
 
-install package
+## install package
+
 npm install
 
-run with nodemon
+## run with nodemon
+
 npm run dev
