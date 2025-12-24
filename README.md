@@ -43,4 +43,8 @@ It supports secure user authentication, transaction management, budgeting, and f
 
 ---
 
-## 📁 Project Structure
+install package
+npm install
+
+run with nodemon
+npm run dev
