@@ -3,8 +3,7 @@ import { ApiError, ApiResponse, asyncHandler } from "../utils/Utility.js";
 export const signUp = asyncHandler(async (req, res) => {
   // validate request
   if (!Object.keys(req.body).length) {
-    res.status(400).json(new ApiError(400, "Bad Request"));
-    return;
+    throw new ApiError(400, "Bad Request");
   }
   // check all required field present
   // check user all ready exist
