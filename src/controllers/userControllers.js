@@ -1,5 +1,4 @@
 import { UserDao } from "../dao/userDao.js";
-import { User } from "../models/User.js";
 import { UserRequest, UserResponse } from "../pojos/user/UserPojos.js";
 import { ApiError, ApiResponse, asyncHandler } from "../utils/Utility.js";
 const userDao = new UserDao();
@@ -86,7 +85,7 @@ export const getUserByIdController = asyncHandler(async (req, res) => {
   if (!userId || userId.trim() === "") {
     return res.status(400).json(new ApiError(400, "User ID is required"));
   }
-  
+
   const existingUser = await userDao.getUserByMultipleKey([{ _id: userId }]);
 
   if (!existingUser) {
@@ -96,4 +95,44 @@ export const getUserByIdController = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, userRes, "User fetched successfully."));
+});
+
+export const deleteUserController = asyncHandler(async (req, res) => {
+  const { userName } = req.body;
+
+  if (!userName || userName.trim() === "") {
+    return res.status(400).json(new ApiError(400, "Username is required"));
+  }
+
+  const existingUser = await userDao.getUserByUserName(userName);
+
+  if (!existingUser) {
+    return res.status(404).json(new ApiError(404, "User not found"));
+  }
+
+  // delete user logic (soft delete)
+
+  // existingUser.isDeleted = true;
+  // await existingUser.save();
+
+  // const userRes = new UserResponse(existingUser);
+
+  // return res
+  //   .status(200)
+  //   .json(new ApiResponse(200, userRes, "User deleted successfully."));
+
+  await userDao.hardDeleteUser(existingUser);
+  // Hard delete user validation
+
+  const checkUser = await userDao.getUserByUserName(userName);
+
+  if (checkUser) {
+    return res
+      .status(500)
+      .json(new ApiError(500, "Internal Server Error while deleting User"));
+  } else {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "User deleted successfully."));
+  }
 });

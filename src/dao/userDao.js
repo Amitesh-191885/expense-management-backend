@@ -50,4 +50,29 @@ export class UserDao {
 
     return newUser;
   }
+
+  async updateUser(user) {
+    const updatedUser = await user.save();
+    return updatedUser;
+  }
+
+  async deleteUser(user) {
+    user.isDeleted = true;
+    const deletedUser = await user.save();
+    return deletedUser;
+  }
+
+  async getAllUsers() {
+    const users = await User.find({ isDeleted: false });
+    return users;
+  }
+
+  async hardDeleteUser(user) {
+    const result = await User.deleteOne({ _id: user._id });
+    return result;
+  } 
+
+  
+
+
 }

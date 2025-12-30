@@ -21,10 +21,14 @@ const port = process.env.PORT || 5000;
 // routes import
 import serverStatusCheck from "./src/routers/serverCheck.js";
 import userRouter from "./src/routers/userRoutes.js";
+import transactionRouter from "./src/routers/transactionRoute.js";
+import budgetRouter from "./src/routers/budgetRouter.js";
 
 //routes declares
 app.use("/", serverStatusCheck);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/transaction", transactionRouter);
+app.use("/api/v1/budget", budgetRouter);
 
 app.listen(port, () => {
   console.log(`server is running at http://localhost:${port}`);

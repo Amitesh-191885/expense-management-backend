@@ -80,7 +80,11 @@ export const updateValidation = [
       return res.status(400).json(new ApiError(400, "Bad Request"));
     }
 
-    const { fullName, role, currency } = req.body;
+    const { fullName, role, currency, userName } = req.body;
+
+    if(!userName || userName.trim() === "") {
+      return res.status(400).json(new ApiError(400, "Username is required"));
+    }
 
     if (role && role.trim() === "") {
       return res.status(400).json(new ApiError(400, "Role cannot be empty"));
