@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import {
+  BUDGET_CATEGORIES,
+  BUDGET_CATEGORIES_ENUM,
+} from "../utils/Constant.js";
 
 const budget = new mongoose.Schema(
   {
@@ -8,8 +12,8 @@ const budget = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["saving", "salary"],
-      default: "salary",
+      enum: BUDGET_CATEGORIES,
+      default: BUDGET_CATEGORIES_ENUM.SALARY,
       trim: true,
     },
     limit: {
@@ -23,16 +27,24 @@ const budget = new mongoose.Schema(
       max: 12,
     },
     year: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     additionalDetails: {
-        type: String,
-        trim: trim,
+      type: String,
+      trim: trim,
     },
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: Number,
+      default: Date.now(),
     },
   },
   {

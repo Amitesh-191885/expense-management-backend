@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { CURRENCY_ENUM, CURRENCY_ENUMS, STUDENT } from "../utils/Constant.js";
 
 const user = new mongoose.Schema(
   {
@@ -21,13 +22,13 @@ const user = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "Student",
+      default: STUDENT,
       trim: true,
     },
     currency: {
       type: String,
-      enum: ["INR", "EUR", "USD", "KWD", "JPY", "AUD"],
-      default: "INR",
+      enum: CURRENCY_ENUMS,
+      default: CURRENCY_ENUM.INR,
       trim: true,
     },
     email: {
@@ -53,18 +54,27 @@ const user = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    updatedAt: {
+      type: Number,
+    },
+    createdAt: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export const User = mongoose.model("User", user);
+user.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
-user.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  await bcrypt
+    .hash(this.password, 10)
+    .then((hashed) => {
+      this.password = hashed;
+    })
+    .catch();
 });
 
 user.methods.isPasswordCorrect = async function (enteredPassword) {
@@ -86,3 +96,4 @@ user.methods.generateAccessToken = async function () {
   );
 };
 
+export const User = mongoose.model("User", user);

@@ -10,6 +10,16 @@ router.get(
   })
 );
 
+router.get(
+  "/health",
+  asyncHandler(async function (req, res) {
+    res.status(200).json({
+      status: "OK",
+      timestamp: new Date().toISOString(),
+    });
+  })
+);
+
 router.post(
   "/api/v1/status",
   asyncHandler(async function name(req, res) {

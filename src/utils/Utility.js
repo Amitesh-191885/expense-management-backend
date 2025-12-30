@@ -1,3 +1,5 @@
+import rateLimit from "express-rate-limit";
+
 export const asyncHandler = (requestHandler) => {
   return (req, res, next) => {
     Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err));
@@ -37,3 +39,9 @@ export class ApiResponse {
     };
   }
 }
+
+export const rateLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  limit: 5,
+  message: new ApiError(429, "Too many requests, please try again later."),
+});

@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
+import {
+  CATEGORY_ENUMS,
+  TRANSACTION_TYPE,
+  TRANSACTION_TYPE_ENUMS,
+} from "../utils/Constant.js";
 
-const CATEGORY_ENUM = [
-  "food",
-  "rent",
-  "travel",
-  "shopping",
-  "entertainment",
-  "others",
-];
 const transaction = new mongoose.Schema(
   {
     userId: {
@@ -21,8 +18,8 @@ const transaction = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["credit", "debit"],
-      default: "debit",
+      enum: TRANSACTION_TYPE_ENUMS,
+      default: TRANSACTION_TYPE.DEBIT,
       required: true,
       trim: true,
     },
@@ -31,9 +28,9 @@ const transaction = new mongoose.Schema(
       required: [true, "amount is required"],
       min: [1, "Amount should be positive integer"],
     },
-    catagory: {
+    category: {
       type: String,
-      enum: CATEGORY_ENUM,
+      enum: CATEGORY_ENUMS,
       trim: true,
     },
     note: {
@@ -47,6 +44,14 @@ const transaction = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: Number,
+      default: Date.now(),
     },
   },
   { timestamps: true }
