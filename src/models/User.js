@@ -9,6 +9,11 @@ const user = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      minlength: 3,
+      maxlength: 30,
+      trim: true,
+      index: true,
+      notNull: true,
     },
     fullName: {
       type: String,
@@ -16,6 +21,7 @@ const user = new mongoose.Schema(
       minlength: 3,
       maxlength: 50,
       trim: true,
+      notNull: true,
     },
     avatar: {
       type: String,
@@ -24,12 +30,14 @@ const user = new mongoose.Schema(
       type: String,
       default: STUDENT,
       trim: true,
+      notNull: true,
     },
     currency: {
       type: String,
       enum: CURRENCY_ENUMS,
       default: CURRENCY_ENUM.INR,
       trim: true,
+      notNull: true,
     },
     email: {
       type: String,
@@ -40,6 +48,7 @@ const user = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
+      notNull: true,
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email",
@@ -49,10 +58,14 @@ const user = new mongoose.Schema(
       type: String,
       required: [true, "password required"],
       trim: true,
+      minlength: 6,
+      maxlength: 128,
+      notNull: true,
     },
     isDeleted: {
       type: Boolean,
       default: false,
+      notNull: true,
     },
     updatedAt: {
       type: Number,

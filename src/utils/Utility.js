@@ -42,6 +42,6 @@ export class ApiResponse {
 
 export const rateLimiter = rateLimit({
   windowMs: 10 * 60 * 1000,
-  limit: 5,
+  limit: 30,
   message: new ApiError(429, "Too many requests, please try again later."),
 });

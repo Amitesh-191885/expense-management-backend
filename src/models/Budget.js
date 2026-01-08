@@ -6,37 +6,50 @@ import {
 
 const budget = new mongoose.Schema(
   {
+    budgetId: {
+      type: String, // fromDate_tillDate
+      notNull: true,
+      required: true,
+      unique: false,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      notNull: true,
+      required: true,
+      index: true,
     },
     category: {
       type: String,
       enum: BUDGET_CATEGORIES,
       default: BUDGET_CATEGORIES_ENUM.SALARY,
       trim: true,
+      required: true,
+      notNull: true,
     },
     limit: {
       type: Number,
       required: true,
+      notNull: true,
+      min: 0,
     },
-    month: {
+    fromDate: {
       type: Number, // 1st day of month
       required: true,
-      min: 1,
-      max: 12,
+      notNull: true,
     },
-    year: {
-      type: Number,
+    tillDate: {
+      type: Number, // end of month
       required: true,
+      notNull: true,
     },
     additionalDetails: {
       type: String,
-      trim: trim,
     },
     isDeleted: {
       type: Boolean,
       default: false,
+      notNull: true,
     },
     createdAt: {
       type: Number,

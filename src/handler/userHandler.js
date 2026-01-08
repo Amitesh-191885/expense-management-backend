@@ -4,7 +4,7 @@ import { ApiError } from "../utils/Utility.js";
 
 export const signUpValidation = [
   (req, res, next) => {
-    console.log("Validating sign up request...");
+    // console.log("Validating sign up request...");
     if (!Object.keys(req.body).length) {
       return res.status(400).json(new ApiError(400, "Bad Request"));
     }
@@ -40,7 +40,7 @@ export const signUpValidation = [
 ];
 
 export const signUpValidate = async (req, res, next) => {
-  console.log("Further validating sign up request...");
+  // console.log("Further validating sign up request...");
   // Add your additional validation logic here
   const { userName, email } = req.body;
   const userDao = new UserDao();
@@ -58,7 +58,7 @@ export const signUpValidate = async (req, res, next) => {
 
 export const signInValidation = [
   (req, res, next) => {
-    console.log("Validating sign in request...");
+    // console.log("Validating sign in request...");
     if (!Object.keys(req.body).length) {
       return res.status(400).json(new ApiError(400, "Bad Request"));
     }
@@ -75,7 +75,7 @@ export const signInValidation = [
 
 export const updateValidation = [
   (req, res, next) => {
-    console.log("Validating update request...");
+    // console.log("Validating update request...");
     if (!Object.keys(req.body).length) {
       return res.status(400).json(new ApiError(400, "Bad Request"));
     }

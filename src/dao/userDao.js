@@ -17,7 +17,6 @@ export class UserDao {
   }
 
   async getUserByMultipleKey(request = [{}]) {
-
     const users = await User.findOne({
       $or: request,
     });
@@ -70,9 +69,5 @@ export class UserDao {
   async hardDeleteUser(user) {
     const result = await User.deleteOne({ _id: user._id });
     return result;
-  } 
-
-  
-
-
+  }
 }

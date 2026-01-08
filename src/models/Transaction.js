@@ -11,10 +11,15 @@ const transaction = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       index: true,
+      required: [true, "userId is required"],
+      notNull: true,
     },
     budgetId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Budget",
+      index: true,
+      required: [true, "budgetId is required"],
+      notNull: true,
     },
     type: {
       type: String,
@@ -22,16 +27,20 @@ const transaction = new mongoose.Schema(
       default: TRANSACTION_TYPE.DEBIT,
       required: true,
       trim: true,
+      notNull: true,
     },
     amount: {
       type: Number,
       required: [true, "amount is required"],
       min: [1, "Amount should be positive integer"],
+      notNull: true,
     },
     category: {
       type: String,
       enum: CATEGORY_ENUMS,
       trim: true,
+      required: [true, "category is required"],
+      notNull: true,
     },
     note: {
       type: String,
@@ -40,10 +49,13 @@ const transaction = new mongoose.Schema(
     transactionTime: {
       type: Number,
       default: Date.now(),
+      required: true,
+      notNull: true,
     },
     isDeleted: {
       type: Boolean,
       default: false,
+      notNull: true,
     },
     createdAt: {
       type: Number,
