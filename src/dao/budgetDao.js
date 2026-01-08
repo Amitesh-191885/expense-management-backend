@@ -3,7 +3,6 @@ import { BUDGET_CATEGORIES_ENUM } from "../utils/Constant.js";
 import { ApiError } from "../utils/Utility.js";
 
 export class BudgetDao {
-
   async getBudgetByBudgetIdandUserId(budgetId, userId) {
     try {
       const budget = await Budget.findOne({
@@ -19,9 +18,9 @@ export class BudgetDao {
     }
   }
 
-  async getBudgetByUserId(userId) {
+  async getBudgetsByUserId(userId) {
     try {
-      const budgets = await Budget.find({
+      let budgets = await Budget.find({
         userId: userId,
       });
       budgets = budgets.filter((t) => !t.isDeleted);
@@ -36,7 +35,7 @@ export class BudgetDao {
 
   async softDeleteBudget(budgetId, userId) {
     try {
-      const budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId)
+      let budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId);
       if (budget) {
         // update budget with isDelated false
         budget.isDeleted = true;
@@ -55,7 +54,7 @@ export class BudgetDao {
 
   async hardDeleteBudget(budgetId, userId) {
     try {
-      const budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId);
+      let budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId);
       if (budget) {
         const result = await Budget.deleteOne({
           budgetId: budgetId,
@@ -93,7 +92,7 @@ export class BudgetDao {
         additionalDetails: additionalDetails,
         isDeleted: isDeleted,
       };
-      // before create Get Budget if already exist then update 
+      // before create Get Budget if already exist then update
       const budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId);
 
       if (budget) {

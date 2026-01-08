@@ -49,3 +49,116 @@ export const createUpdateBudgetController = asyncHandler(
     }
   }
 );
+
+export const getBudgetController = asyncHandler(async function (req, res) {
+  const { userId, fromDate, tillDate, pageNo } = req.body;
+
+  if (!userId || userId == "") {
+    return res.status(400).json(new ApiError(400, "Invalid User Id"));
+  }
+
+  let budgets = await budgetDao.getBudgetsByUserId(userId);
+
+  if (budgets.length) {
+    // if fromDate and tillDate the filter
+    // else return paginated top 30
+
+    if (fromDate && tillDate) {
+      budgets = budgets.filter(
+        (budget) => budget.fromDate >= fromDate && budget.tillDate <= tillDate
+      );
+
+      if (budgets.length == 0) {
+        return res.status(404).json(
+          new ApiResponse(
+            404,
+            {
+              budgets: [],
+              currentPage: 0,
+              totalPages: 0,
+            },
+            "No budgets found for given time period"
+          )
+        );
+      }
+
+      if (budgets.length < 30) {
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              budgets: budgets,
+              currentPage: 1,
+              totalPages: 1,
+            },
+            "Budgets fetched successfully"
+          )
+        );
+      }
+      let totalPages = Math.ceil(budgets.length / 30);
+
+      if (pageNo && pageNo > 0 && pageNo <= totalPages) {
+        const startIndex = (pageNo - 1) * 30;
+        const endIndex = startIndex + 30;
+        budgets = budgets.slice(startIndex, endIndex);
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              budgets: budgets,
+              currentPage: pageNo,
+              totalPages: totalPages,
+            },
+            "Budgets fetched successfully"
+          )
+        );
+      }
+
+      budgets = budgets.slice(0, 30);
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(
+            200,
+            { budgets: budgets, currentPage: 1, totalPages: totalPages },
+            "Budgets fetched successfully"
+          )
+        );
+    }
+    let totalPages = Math.ceil(budgets.length / 30);
+
+    if (pageNo && pageNo > 0 && pageNo <= totalPages) {
+      const startIndex = (pageNo - 1) * 30;
+      const endIndex = startIndex + 30;
+      budgets = budgets.slice(startIndex, endIndex);
+      return res.status(200).json(
+        new ApiResponse(
+          200,
+          {
+            budgets: budgets,
+            currentPage: pageNo,
+            totalPages: totalPages,
+          },
+          "Budgets fetched successfully"
+        )
+      );
+    }
+
+    budgets = budgets.slice(0, 30);
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          budgets: budgets,
+          currentPage: 1,
+          totalPages: totalPages,
+        },
+        "Budgets fetched successfully"
+      )
+    );
+  } else {
+    res
+      .status(404)
+      .json(new ApiResponse(404, [], "User doesn't created any budgets"));
+  }
+});
