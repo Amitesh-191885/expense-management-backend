@@ -6,6 +6,7 @@ import {
 } from "../handler/budgetHandler.js";
 import {
   createUpdateBudgetController,
+  deleteBudgetController,
   getBudgetController,
 } from "../controllers/budgetControllers.js";
 
@@ -27,6 +28,6 @@ router.post(
   createBudgetValidation,
   createUpdateBudgetController
 );
-// router.post("/delete", rateLimiter, deleteBudgetController);
+router.post("/deletebybudgetid", rateLimiter, deleteBudgetController);
 
 export default router;

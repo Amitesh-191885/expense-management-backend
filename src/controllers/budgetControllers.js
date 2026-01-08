@@ -45,7 +45,7 @@ export const createUpdateBudgetController = asyncHandler(
           new ApiResponse(201, budget, "Budget created/updated successfully")
         );
     } else {
-      res.statusCode(500).json(new ApiError(500, "Unable to create at moment"));
+      res.status(500).json(new ApiError(500, "Unable to create at moment"));
     }
   }
 );
@@ -161,4 +161,68 @@ export const getBudgetController = asyncHandler(async function (req, res) {
       .status(404)
       .json(new ApiResponse(404, [], "User doesn't created any budgets"));
   }
+});
+
+export const deleteBudgetController = asyncHandler(async function (req, res) {
+  const { budgetId, forceDelete } = req.body;
+
+  const budget = await budgetDao.getBudgetByid(budgetId);
+  if (budget && !budget.isDeleted) {
+    if (forceDelete) {
+      const result = await budgetDao.hardDeleteBudget(
+        budget.budgetId,
+        budget.userId
+      );
+      if (result) {
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              deleted: result,
+            },
+            "Budgets deleted successfully"
+          )
+        );
+      } else {
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              deleted: result,
+            },
+            "Unable to delete Budgets at the moment"
+          )
+        );
+      }
+    } else {
+      const result = await budgetDao.softDeleteBudget(
+        budget.budgetId,
+        budget.userId
+      );
+      if (result) {
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              deleted: result,
+            },
+            "Budgets deleted successfully"
+          )
+        );
+      } else {
+        return res.status(200).json(
+          new ApiResponse(
+            200,
+            {
+              deleted: result,
+            },
+            "Unable to delete Budgets at the moment"
+          )
+        );
+      }
+    }
+  }
+  return res
+    .status(404)
+    .json(new ApiError(404, "Budget not found, by BudgetId"));
 });

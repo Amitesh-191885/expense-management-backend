@@ -3,6 +3,17 @@ import { BUDGET_CATEGORIES_ENUM } from "../utils/Constant.js";
 import { ApiError } from "../utils/Utility.js";
 
 export class BudgetDao {
+  async getBudgetByid(id) {
+    try {
+      const budget = await Budget.findOne({
+        _id: id,
+      });
+      return budget;
+    } catch (error) {
+      throw new ApiError(500, "Internal Server Error, while fetching by _id");
+    }
+  }
+
   async getBudgetByBudgetIdandUserId(budgetId, userId) {
     try {
       const budget = await Budget.findOne({
@@ -13,7 +24,7 @@ export class BudgetDao {
     } catch (error) {
       throw new ApiError(
         500,
-        "Internal Server Error, while fetching by userId"
+        "Internal Server Error, while fetching by BudgetId, userId"
       );
     }
   }
@@ -47,7 +58,7 @@ export class BudgetDao {
     } catch (error) {
       throw new ApiError(
         500,
-        "Internal Server Error, while fetching by userId"
+        "Internal Server Error, while softDelete by budgetId, userId"
       );
     }
   }
@@ -66,7 +77,7 @@ export class BudgetDao {
     } catch (error) {
       throw new ApiError(
         500,
-        "Internal Server Error, while fetching by userId"
+        "Internal Server Error, while hard Delete by budgetId, userId"
       );
     }
   }
