@@ -14,7 +14,7 @@ router.get(
   "/health",
   asyncHandler(async function (req, res) {
     res.status(200).json({
-      status: "OK",
+      status: "Server Running status OK",
       timestamp: new Date().toISOString(),
     });
   })

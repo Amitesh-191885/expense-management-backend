@@ -68,7 +68,9 @@ export class BudgetDao {
       let budget = await this.getBudgetByBudgetIdandUserId(budgetId, userId);
       if (budget) {
         const result = await Budget.deleteOne({
+          _id: budget._id,
           budgetId: budgetId,
+          userId: userId,
         });
         return result;
       } else {

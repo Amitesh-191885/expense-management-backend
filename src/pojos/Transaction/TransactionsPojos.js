@@ -1,11 +1,13 @@
+import { CATEGORY_ENUM, TRANSACTION_TYPE } from "../../utils/Constant.js";
+
 export class TransactionPojos {
   static createTransactionPojo({
     userId,
     budgetId,
-    type,
-    amount,
-    category,
     transactionTime,
+    amount,
+    type=TRANSACTION_TYPE.DEBIT,
+    category=CATEGORY_ENUM.SHOPPING,
     note = null,
     isDeleted = false,
   }) {
