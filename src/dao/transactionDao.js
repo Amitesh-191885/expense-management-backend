@@ -52,11 +52,8 @@ export class TransactionDao {
   // generic request for get
   async getTransactionGenral(request) {
     try {
-      const { transactionId, budgetId, userId, type, category } = request;
+      const { budgetId, userId, type, category } = request;
       let req = {};
-      if (transactionId) {
-        req["_id"] = transactionId;
-      }
       if (budgetId) {
         req["budgetId"] = budgetId;
       }
@@ -70,7 +67,7 @@ export class TransactionDao {
         req["category"] = category;
       }
 
-      if (Object.keys(req).length()) {
+      if (Object.keys(req).length) {
         const transactions = await Transaction.find(req);
         return transactions;
       } else {
@@ -104,7 +101,7 @@ export class TransactionDao {
         note: note,
       });
 
-      if (transactionId) {
+      if (transactionId && transactionId != null) {
         // update
         const transaction = this.getTransactionByTransactionId(transactionId);
         if (transaction) {
@@ -127,7 +124,7 @@ export class TransactionDao {
 
   async softDeleteTransaction(transactionId) {
     try {
-      const transaction = this.getTransactionByTransactionId(transactionId);
+      let transaction = await this.getTransactionByTransactionId(transactionId);
       if (transaction) {
         transaction.isDeleted = true;
         await transaction.save();
